@@ -1,0 +1,8 @@
+[
+  {
+    "topic": "sample",
+    "parallelism": 4,
+    "consumerSize": 2,
+    "groupId": "abcwe"
+  }
+]

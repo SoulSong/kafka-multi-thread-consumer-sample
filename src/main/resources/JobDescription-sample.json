@@ -1,0 +1,16 @@
+[
+  {
+    "topic": "TOPIC-A",
+    "parallelism": 1,
+    "consumerSize": 1,
+    "groupId": "123",
+    "recordHandleTimeoutOfMillis": 200,
+    "pollTimeoutOfMillis": 30000
+  },
+  {
+    "topic": "TOPIC-B",
+    "parallelism": 2,
+    "consumerSize": 3,
+    "groupId": "456"
+  }
+]

@@ -17,6 +17,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -64,11 +65,12 @@ public class KafkaConsumerApplication {
 
         List<MultithreadedKafkaConsumer> consumerList = new ArrayList<>();
         jobDescriptions.forEach(jobDescription -> {
+            // 一个topic定义一个共享线程池定义
+            ThreadPoolTaskExecutor executor = ThreadPoolFactory.createThreadPoolTaskExecutor(jobDescription);
             // 根据每个job描述，构建对应的consumer实例数
             IntStream.range(0, jobDescription.getConsumerSize()).forEach(index -> {
                 MultithreadedKafkaConsumer<String, String, Void> consumer = new StringMultithreadedKafkaConsumer(bootstrapServers,
-                        // 线程池定义
-                        ThreadPoolFactory.createThreadPoolTaskExecutor(jobDescription),
+                        executor,
                         jobDescription.getTopic(), jobDescription.getGroupId(),
                         // 处理器定义
                         new LogRecordProcessor(), StringDeserializer.class, StringDeserializer.class,
